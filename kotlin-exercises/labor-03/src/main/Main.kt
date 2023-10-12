@@ -42,7 +42,13 @@ fun main(args: Array<String>) {
     company.displayEmployees()
 
     // Firing an Employee
-    company.fireEmployee(5);
+    val id = 5;
+    if(company.fireEmployee(id)){
+        println("Employee ID: $id | Fired Successully!")
+    } else {
+        println("Employee With ID: $id | Was not found!")
+    }
+    println("")
     println("-- After firing Aurel  :( --")
     company.displayEmployees();
 }
