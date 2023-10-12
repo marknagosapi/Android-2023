@@ -6,13 +6,13 @@ fun main(args: Array<String>) {
     val company = Company();
 
     // creating employees
-    val employee1 = Employee("Peter", 1, 1000.0)
-    val employee2 = Employee("Lajos", 2, 2000.0)
-    val employee3 = Employee("Andras", 3, 3000.0)
+    val employee1 = Employee("Peter",  1000.0)
+    val employee2 = Employee("Lajos",  2000.0)
+    val employee3 = Employee("Andras",  3000.0)
 
     // creating managers
-    val manager1 = Manager("IT", "Mark", 4, 5000.0)
-    val manager2 = Manager("HR", "Aurel", 5, 10000.0)
+    val manager1 = Manager("IT", "Mark",  5000.0)
+    val manager2 = Manager("HR", "Aurel",  10000.0)
 
 
     // adding emps

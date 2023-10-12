@@ -1,6 +1,17 @@
 package main
 
-open class Employee(val name: String, val employeeID: Int, private var salary: Double) {
+open class Employee(val name: String,  private var salary: Double) {
+
+    var employeeID : Int = 0
+
+    companion object{
+        var idCounter = 1;
+    }
+
+    init{
+        employeeID = idCounter;
+        idCounter++;
+    }
 
     fun getSalary(): Double {
         return salary
