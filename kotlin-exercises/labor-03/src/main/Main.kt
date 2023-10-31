@@ -1,5 +1,7 @@
 package main
 
+import kotlin.reflect.typeOf
+
 fun main(args: Array<String>) {
 
     // creating a company
@@ -51,4 +53,5 @@ fun main(args: Array<String>) {
     println("")
     println("-- After firing Aurel  :( --")
     company.displayEmployees();
+
 }
