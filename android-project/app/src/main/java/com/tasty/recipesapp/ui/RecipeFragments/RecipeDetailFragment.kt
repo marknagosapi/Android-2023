@@ -1,4 +1,4 @@
-package com.tasty.recipesapp.ui
+package com.tasty.recipesapp.ui.RecipeFragments
 
 import android.os.Bundle
 import android.util.Log
@@ -7,22 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.tasty.recipesapp.R
-import com.tasty.recipesapp.databinding.FragmentHomeBinding
 import com.tasty.recipesapp.databinding.FragmentProfileBinding
+import com.tasty.recipesapp.databinding.FragmentRecipeDetailBinding
 
-class ProfileFragment : Fragment() {
+class RecipeDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentProfileBinding
+
+    private lateinit var binding: FragmentRecipeDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("SCREENS","Opened Profile Screen!")
+        Log.d("SCREENS","Opened Recipe Detail Screen!")
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        binding = FragmentRecipeDetailBinding.inflate(inflater, container, false);
         return binding.root;
     }
+
+
 }

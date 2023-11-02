@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="bottom_nav_background">#333333</color> <!-- Background color -->
+    <color name="bottom_nav_background">#a3713b</color> <!-- Background color -->
     <color name="bottom_nav_item_text">#FFFFFF</color> <!-- Text color -->
-    <color name="bottom_nav_item_icon">#FFA500</color> <!-- Icon color -->
-    <color name="bottom_nav_item_text_selected">#FFA500</color> <!-- Selected text color -->
-    <color name="bottom_nav_item_icon_selected">#FFFFFF</color> <!-- Selected icon color -->
+    <color name="bottom_nav_item_icon">#EB387A</color> <!-- Icon color -->
+    <color name="bottom_nav_item_text_selected">#F7E274</color> <!-- Selected text color -->
+    <color name="bottom_nav_item_icon_selected">#EB387A</color> <!-- Selected icon color -->
 
 </resources>
