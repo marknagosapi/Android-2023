@@ -1,8 +1,7 @@
 package com.tasty.recipesapp.data.model
 
-import com.tasty.recipesapp.data.dto.UnitDTO
-data class MeasurementDTO(
-    val unit: UnitDTO,
+data class MeasurementModel(
+    val unit: UnitModel,
     val quantity: String,
     val id: Int
 )

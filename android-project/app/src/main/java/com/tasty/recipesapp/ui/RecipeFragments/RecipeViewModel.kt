@@ -6,17 +6,15 @@ import androidx.lifecycle.ViewModel
 
 import com.tasty.recipesapp.data.dto.InstructionDTO
 import com.tasty.recipesapp.data.model.InstructionModel
+import com.tasty.recipesapp.data.model.RecipeModel
+import com.tasty.recipesapp.data.repositories.RecipeRepository
 import com.tasty.recipesapp.providers.RepositoryProvider
 
 class RecipeViewModel : ViewModel(){
 
-    private val _instructions = MutableLiveData<List<InstructionModel>>()
-    val instructionModels: MutableLiveData<List<InstructionModel>> = _instructions
+    private val recipeRepository = RecipeRepository()
 
-
-
-    fun loadInstructionData(context: Context) {
-        val data = RepositoryProvider.instructionsRepository.getAll(context)
-        instructionModels.value = data
+    fun loadRecipesFromAssets(context: Context): List<RecipeModel>? {
+        return recipeRepository.loadRecipesFromAssets(context)
     }
 }
