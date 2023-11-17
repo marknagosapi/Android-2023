@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tasty.recipesapp.R
 import com.tasty.recipesapp.databinding.FragmentProfileBinding
 import com.tasty.recipesapp.databinding.FragmentRecipeBinding
@@ -15,7 +17,6 @@ import com.tasty.recipesapp.databinding.FragmentRecipeBinding
 class RecipeFragment : Fragment() {
 
     private lateinit var binding: FragmentRecipeBinding
-    private val recipeViewModel : RecipeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,14 @@ class RecipeFragment : Fragment() {
 
         val viewModel = ViewModelProvider(this)[RecipeViewModel::class.java]
         val recipes = viewModel.loadRecipesFromAssets(requireContext())
+
+        val recyclerView: RecyclerView = binding.recyclerView;
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        val adapter = recipes?.let { RecipeAdapter(it) }
+        recyclerView.adapter = adapter
+
+
 
         recipes?.forEach {
             Log.d("Recipe", "Recipe ID: ${it.id} Recipe Name: ${it.name}")

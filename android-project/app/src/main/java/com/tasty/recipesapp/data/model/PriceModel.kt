@@ -1,10 +1,17 @@
 package com.tasty.recipesapp.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class PriceModel (
-    val consumption_portion: Int,
+    @SerializedName("consumption_portion")
+    val consumptionPortion: Int,
+    @SerializedName("total")
     val total: Int,
-    val updated_at: String,
+    @SerializedName("updated_at")
+    val updatedAt: String,
+    @SerializedName("portion")
     val portion: Int,
-    val consumption_total: Int
+    @SerializedName("consumption_total")
+    val consumptionTotal: Int
 
 )

@@ -56,11 +56,11 @@ object Mapping {
     }
     private fun PriceDTO.toModel(): PriceModel {
         return PriceModel(
-            consumption_portion = this.consumption_portion,
+            consumptionPortion = this.consumption_portion,
             total = this.total,
-            updated_at = this.updated_at,
+            updatedAt = this.updated_at,
             portion = this.portion,
-            consumption_total = this.consumption_total,
+            consumptionTotal = this.consumption_total,
         )
     }
 
