@@ -1,15 +1,19 @@
 package com.tasty.recipesapp.data.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class RecipeDTO(
-//    val tags: List<TagDTO>,
-//    val thumbnail_alt_text: String?,
+    val tags: List<TagDTO>,
+    @SerializedName("thumbnail_alt_text")
+    val thumbnailAltText: String?,
 //    val promotion: String,
-//    val thumbnail_url: String?,
+    @SerializedName("thumbnail_url")
+    val thumbnailUrl: String?,
 //    val original_video_url: String?,
     val price: PriceDTO,
 //    val tips_and_ratings_enabled: Boolean,
 //    val servings_noun_plural: String,
-//    val user_ratings: UserRatingsDTO,
+    val user_ratings: UserRatingsDTO,
 //
 //    val language: String,
     val id: Int,

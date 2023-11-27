@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import com.tasty.recipesapp.R
+import com.tasty.recipesapp.providers.RepositoryProvider
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main)
         initBottomNavigation()
-
+        RepositoryProvider.initialize(context = this.applicationContext)
     }
 
     private fun initBottomNavigation() {

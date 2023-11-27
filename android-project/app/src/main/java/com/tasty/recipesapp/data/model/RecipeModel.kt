@@ -1,14 +1,14 @@
 package com.tasty.recipesapp.data.model
 data class RecipeModel (
-//    val tags: List<TagModel>,
-//    val thumbnail_alt_text: String?,
+    val tags: List<TagModel>,
+    val thumbnailAltText: String?,
 //    val promotion: String,
-//    val thumbnail_url: String?,
+    val thumbnailUrl: String?,
 //    val original_video_url: String?,
     val price: PriceModel,
 //    val tips_and_ratings_enabled: Boolean,
 //    val servings_noun_plural: String,
-//    val user_ratings: UserRatingsModel,
+    val user_ratings: UserRatingsModel,
 //    val language: String,
     val id: Int,
     val sections: List<SectionModel>,

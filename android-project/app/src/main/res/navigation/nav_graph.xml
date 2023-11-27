@@ -23,7 +23,11 @@
         android:id="@+id/profileFragment"
         android:name="com.tasty.recipesapp.ui.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_newRecipeFragment"
+            app:destination="@id/newRecipeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/recipeDetailFragment"
         android:name="com.tasty.recipesapp.ui.RecipeFragments.RecipeDetailFragment"
@@ -39,4 +43,9 @@
         android:name="com.tasty.recipesapp.activities.SplashActivity"
         android:label="activity_splash"
         tools:layout="@layout/activity_splash" />
+    <fragment
+        android:id="@+id/newRecipeFragment"
+        android:name="com.tasty.recipesapp.ui.RecipeFragments.NewRecipeFragment"
+        android:label="fragment_new_recipe"
+        tools:layout="@layout/fragment_new_recipe" />
 </navigation>

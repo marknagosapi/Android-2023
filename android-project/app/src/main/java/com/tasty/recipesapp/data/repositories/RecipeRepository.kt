@@ -3,18 +3,20 @@ package com.tasty.recipesapp.data.repositories
 import com.google.gson.Gson
 import com.tasty.recipesapp.data.dto.RecipeDTO
 import android.content.Context
-import com.google.gson.reflect.TypeToken
+import com.tasty.recipesapp.data.dao.RecipeDao
+import com.tasty.recipesapp.data.entities.RecipeEntity
 import com.tasty.recipesapp.data.model.RecipeModel
+import com.tasty.recipesapp.data.utils.Mapping.toModel
 import com.tasty.recipesapp.data.utils.Mapping.toModelList
-import java.io.IOException
+import org.json.JSONObject
 import java.lang.Exception
 
 data class RecipeResponseDTO(
     val count : Int,
     val results: List<RecipeDTO>
 )
+class RecipeRepository(private val recipeDao: RecipeDao){
 
-class RecipeRepository{
     fun loadRecipesFromAssets(context: Context): List<RecipeModel>? {
         val jsonFileName = "data.json"
         val json: String
@@ -29,43 +31,22 @@ class RecipeRepository{
             e.printStackTrace()
             return null
         }
-
         val gson = Gson()
 //        Create a list of the recipes from the results of the json file
         val recipeList = gson.fromJson(json, RecipeResponseDTO::class.java)
         return recipeList.results.toModelList()
     }
 
-
-    fun readAll(context: Context): List<RecipeDTO> {
+    suspend fun insertRecipe(recipe: RecipeEntity) {
+        recipeDao.insertRecipe(recipe)
+    }
+    suspend fun getAllRecipes(): List<RecipeModel> {
         val gson = Gson()
-        var recipeList = listOf<RecipeDTO>()
-        val assetManager = context.assets
-        try {
-            val inputStream = assetManager.open("data.json")
-            val size = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-            val jsonString = String(buffer, Charsets.UTF_8)
-
-//            //If there is an extra label
-//            val jsonObject = JSONObject(jsonString)
-//            val instructionsArray = jsonObject.getJSONArray("instructions")
-
-            val type = object : TypeToken<List<RecipeDTO>>() {}.type
-            //if it is simple
-            //val instructionList = gson.fromJson<List<InstructionDTO>>(jsonString, type)
-            // if with label
-//            recipeList = gson.fromJson(instructionsArray.toString(), type)
-
-
-//            Log.i("GSON", recipeList.toString())
-            //instructions.value = instructionList
-        } catch (e: IOException) {
-            e.printStackTrace()
+        return recipeDao.getAllRecipes().map {
+            val jsonObject = JSONObject(it.json)
+            jsonObject.apply{ put("id", it.internalId) }
+            gson.fromJson(jsonObject.toString(), RecipeDTO::class.java).toModel()
         }
-        return recipeList
     }
 }
 

@@ -8,7 +8,9 @@ import com.tasty.recipesapp.data.dto.NutritionDTO
 import com.tasty.recipesapp.data.dto.PriceDTO
 import com.tasty.recipesapp.data.dto.RecipeDTO
 import com.tasty.recipesapp.data.dto.SectionDTO
+import com.tasty.recipesapp.data.dto.TagDTO
 import com.tasty.recipesapp.data.dto.UnitDTO
+import com.tasty.recipesapp.data.dto.UserRatingsDTO
 import com.tasty.recipesapp.data.model.ComponentModel
 import com.tasty.recipesapp.data.model.IngredientModel
 import com.tasty.recipesapp.data.model.InstructionModel
@@ -18,7 +20,9 @@ import com.tasty.recipesapp.data.model.NutritionModel
 import com.tasty.recipesapp.data.model.PriceModel
 import com.tasty.recipesapp.data.model.RecipeModel
 import com.tasty.recipesapp.data.model.SectionModel
+import com.tasty.recipesapp.data.model.TagModel
 import com.tasty.recipesapp.data.model.UnitModel
+import com.tasty.recipesapp.data.model.UserRatingsModel
 
 object Mapping {
     @JvmName("toRecipeModel")
@@ -31,6 +35,10 @@ object Mapping {
             price = this.price.toModel(),
             sections = sections.toModelList(),
             nutrition = this.nutrition.toModel(),
+            tags = this.tags.toModelList(),
+            user_ratings = this.user_ratings.toModel(),
+            thumbnailAltText = this.thumbnailAltText,
+            thumbnailUrl = this.thumbnailUrl
         )
     }
 
@@ -54,6 +62,40 @@ object Mapping {
      fun List<NutritionDTO>.toModelList(): List<NutritionModel> {
         return this.map { it.toModel() }
     }
+
+//    UserRatings
+    @JvmName("toUserRatingsModel")
+    fun UserRatingsDTO.toModel(): UserRatingsModel {
+        return UserRatingsModel(
+            countPositive = this.countPositive,
+            score = this.score,
+            countNegative = this.countNegative
+        )
+    }
+
+    @JvmName("toUserRatingsModelList")
+    fun List<UserRatingsDTO>.toModelList(): List<UserRatingsModel> {
+        return this.map { it.toModel() }
+    }
+
+
+//    Tags
+    @JvmName("toTagModel")
+    fun TagDTO.toModel(): TagModel {
+        return TagModel(
+            id = this.id,
+            displayName = this.display_name,
+            type = this.type,
+            rootTagType = this.root_tag_type,
+            name = this.name
+        )
+    }
+    @JvmName("toTagModelList")
+    fun List<TagDTO>.toModelList(): List<TagModel> {
+        return this.map { it.toModel() }
+    }
+
+    @JvmName("toPriceModel")
     private fun PriceDTO.toModel(): PriceModel {
         return PriceModel(
             consumptionPortion = this.consumption_portion,
@@ -64,6 +106,7 @@ object Mapping {
         )
     }
 
+    @JvmName("toPriceModelList")
     fun List<PriceDTO>.toModelList(): List<PriceModel> {
         return this.map { it.toModel() }
     }

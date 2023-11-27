@@ -20,6 +20,11 @@ class InstructionRepository : IGenericRepository<InstructionDTO, InstructionMode
         )
     }
 
+
+//  userRatings
+
+
+
     override fun List<InstructionDTO>.toModelList(): List<InstructionModel> {
         return this.map { it.toModel() }
     }
