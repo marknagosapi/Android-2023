@@ -36,9 +36,10 @@ object Mapping {
             sections = sections.toModelList(),
             nutrition = this.nutrition.toModel(),
             tags = this.tags.toModelList(),
-            user_ratings = this.user_ratings.toModel(),
+            userRatings = this.userRatings.toModel(),
             thumbnailAltText = this.thumbnailAltText,
-            thumbnailUrl = this.thumbnailUrl
+            thumbnailUrl = this.thumbnailUrl,
+            videoUrl = this.videoUrl
         )
     }
 

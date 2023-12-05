@@ -25,16 +25,12 @@ class RecipeAdapter(private val recipes: List<RecipeModel>) :
 
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        init{
-            Log.d("ViewHolderDebug", "itemView: ${itemView.findViewById<ImageView>(R.id.recipeMainImage)}")
-        }
-
         val recipeTitle: TextView = itemView.findViewById(R.id.recipeTitle)
         val recipeCalories: TextView = itemView.findViewById(R.id.calories)
         val recipeProtein: TextView = itemView.findViewById(R.id.protein)
         val recipeCarbs: TextView = itemView.findViewById(R.id.carbohydrates)
         val recipeFats: TextView = itemView.findViewById(R.id.fats)
-//        val recipeImage: ImageView = itemView.findViewById(R.id.recipeMainImage)
+        val recipeImage: ImageView = itemView.findViewById(R.id.recipeImage)
 
     }
 
@@ -72,11 +68,11 @@ class RecipeAdapter(private val recipes: List<RecipeModel>) :
 
 
         // Load recipe image using Glide
-//        Glide.with(holder.itemView.context)
-//            .load(recipe.thumbnailUrl)
-//            .placeholder(R.drawable.cheesecake_logo) // Placeholder image if loading fails
-////            .error(R.drawable.error_image) // Image to show if there's an error
-//            .into(holder.recipeImage)
+        Glide.with(holder.itemView.context)
+            .load(recipe.thumbnailUrl)
+            .placeholder(R.drawable.cheesecake_logo) // Placeholder image if loading fails
+//            .error(R.drawable.error_image) // Image to show if there's an error
+            .into(holder.recipeImage)
     }
 
     override fun getItemCount(): Int {

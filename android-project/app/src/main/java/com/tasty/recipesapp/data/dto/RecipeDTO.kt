@@ -13,14 +13,16 @@ data class RecipeDTO(
     val price: PriceDTO,
 //    val tips_and_ratings_enabled: Boolean,
 //    val servings_noun_plural: String,
-    val user_ratings: UserRatingsDTO,
+    @SerializedName("user_ratings")
+    val userRatings: UserRatingsDTO,
 //
 //    val language: String,
     val id: Int,
 //
     val sections: List<SectionDTO>,
     val name: String,
-//    val video_url: String,
+    @SerializedName("video_url")
+    val videoUrl: String,
 //    val yields: String,
     val nutrition: NutritionDTO,
 //    val is_app_only: Boolean,

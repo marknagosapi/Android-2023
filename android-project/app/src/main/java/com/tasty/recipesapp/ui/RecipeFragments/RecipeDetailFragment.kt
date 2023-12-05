@@ -9,7 +9,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.tasty.recipesapp.R
 import com.tasty.recipesapp.databinding.FragmentRecipeDetailBinding
+import kotlin.math.log
 
 class RecipeDetailFragment : Fragment() {
 
@@ -43,12 +46,18 @@ class RecipeDetailFragment : Fragment() {
         // Retrieve arguments
         val title = arguments?.getString(recipeTitle) ?: ""
         val description = arguments?.getString(recipeDescription    ) ?: ""
-        val imageResId = arguments?.getInt(ARG_RECIPE_IMAGE) ?: 0
+        val imageResId = arguments?.getString(ARG_RECIPE_IMAGE) ?: ""
         val instructions = arguments?.getString(ARG_RECIPE_INSTRUCTIONS) ?: ""
+        Log.d("alma", "onViewCreated: " + instructions)
 
         // Update UI with recipe details
-        binding.recipeImage.setImageResource(imageResId)
-        binding.recipeInstructions.text = instructions
+        Glide.with(requireContext())
+            .load(imageResId)
+            .placeholder(R.drawable.cheesecake_logo) // Placeholder image if loading fails
+//            .error(R.drawable.error_image) // Image to show if there's an error
+            .into(binding.recipeDetailImage)
+
+        binding.recipeInstructionsText.text = instructions
         binding.recipeTitle.text = title
         binding.recipeDescription.text = description
 

@@ -10,13 +10,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back"
-            android:layout_below="@id/recipeInstructions"
+            android:layout_below="@id/recipeInstructionsText"
             android:layout_marginTop="16dp"/>
 
         <ImageView
-            android:id="@+id/recipeImage"
+            android:id="@+id/recipeDetailImage"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:layout_marginBottom="8dp"/>
 
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_below="@id/recipeImage"
+            android:layout_below="@id/recipeDetailImage"
             android:layout_marginTop="8dp"/>
 
         <TextView
@@ -38,13 +38,13 @@
             android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/recipeInstructions"
+            android:id="@+id/recipeInstructionsText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/recipeDescription"
             android:layout_marginTop="8dp"
             android:text="Instructions: "
-            android:textSize="16sp"/>
+            android:textSize="20sp"/>
 
         <!-- Add other UI elements as needed -->
 
