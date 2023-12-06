@@ -53,8 +53,8 @@ class RecipeDetailFragment : Fragment() {
         // Update UI with recipe details
         Glide.with(requireContext())
             .load(imageResId)
-            .placeholder(R.drawable.cheesecake_logo) // Placeholder image if loading fails
-//            .error(R.drawable.error_image) // Image to show if there's an error
+            .placeholder(R.drawable.cheesecake_logo)
+
             .into(binding.recipeDetailImage)
 
         binding.recipeInstructionsText.text = instructions

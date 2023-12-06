@@ -38,6 +38,10 @@ android {
 
 dependencies {
 
+
+    implementation ("androidx.media3:media3-exoplayer:1.0.1")
+    implementation ("androidx.media3:media3-exoplayer-dash:1.0.1")
+    implementation ("androidx.media3:media3-ui:1.0.1")
     val nav_version = "2.7.4"
 
     implementation("androidx.core:core-ktx:1.9.0")

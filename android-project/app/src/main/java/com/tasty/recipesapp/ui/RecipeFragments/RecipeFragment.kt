@@ -49,32 +49,5 @@ class RecipeFragment : Fragment() {
         val adapter = recipes?.let { RecipeAdapter(it) }
         recyclerView.adapter = adapter
 
-
-        recipes?.forEach {
-            Log.d("Recipe", "Recipe ID: ${it.id} Recipe Name: ${it.name}")
-
-            Log.d("Recipe", "Recipe Description:")
-            Log.d("Recipe",it.description)
-            Log.d("Recipe","Price: ${it.price.total}")
-            Log.d("Recipe","Nutrition:")
-            Log.d("Recipe", "Calories: ${it.nutrition.calories}")
-            Log.d("Recipe", "Carbohydrates: ${it.nutrition.carbohydrates}")
-            Log.d("Recipe", "Fat: ${it.nutrition.fat}")
-            Log.d("Recipe", "Sugar: ${it.nutrition.sugar}")
-            Log.d("Recipe", "Instructions:")
-//            Log the instructions
-            it.instructions.forEach {
-                Log.d("Recipe", "\t${it.displayText}")
-            }
-
-//            Log the sections
-            Log.d("Recipe", "Sections:")
-            it.sections.forEach {
-                Log.d("Recipe", "\t${it.name}")
-                it.components.forEach {
-                    Log.d("Recipe", "\t\t${it.raw_text}")
-                }
-            }
-        }
     }
 }

@@ -4,7 +4,9 @@ import com.google.gson.Gson
 import com.tasty.recipesapp.data.dto.RecipeDTO
 import android.content.Context
 import com.tasty.recipesapp.data.dao.RecipeDao
+import com.tasty.recipesapp.data.dto.NewRecipeDTO
 import com.tasty.recipesapp.data.entities.RecipeEntity
+import com.tasty.recipesapp.data.model.NewRecipeModel
 import com.tasty.recipesapp.data.model.RecipeModel
 import com.tasty.recipesapp.data.utils.Mapping.toModel
 import com.tasty.recipesapp.data.utils.Mapping.toModelList
@@ -15,7 +17,8 @@ data class RecipeResponseDTO(
     val count : Int,
     val results: List<RecipeDTO>
 )
-class RecipeRepository(private val recipeDao: RecipeDao){
+class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<NewRecipeDTO, NewRecipeModel> {
+    val instructionsRepository: InstructionRepository = InstructionRepository()
 
     fun loadRecipesFromAssets(context: Context): List<RecipeModel>? {
         val jsonFileName = "data.json"
@@ -40,6 +43,9 @@ class RecipeRepository(private val recipeDao: RecipeDao){
     suspend fun insertRecipe(recipe: RecipeEntity) {
         recipeDao.insertRecipe(recipe)
     }
+    suspend fun deleteRecipe(recipe: RecipeEntity) {
+        recipeDao.deleteRecipe(recipe)
+    }
     suspend fun getAllRecipes(): List<RecipeModel> {
         val gson = Gson()
         return recipeDao.getAllRecipes().map {
@@ -47,6 +53,41 @@ class RecipeRepository(private val recipeDao: RecipeDao){
             jsonObject.apply{ put("id", it.internalId) }
             gson.fromJson(jsonObject.toString(), RecipeDTO::class.java).toModel()
         }
+    }
+    suspend fun getAllOwnRecipes(): List<NewRecipeModel> {
+        return recipeDao.getAllRecipes().map {
+            val jsonObject = JSONObject(it.json)
+            jsonObject.apply { put("id", it.internalId) }
+            val gson = Gson()
+            gson.fromJson(jsonObject.toString(), NewRecipeDTO::class.java).toModel()
+        }
+    }
+
+    suspend fun getRecipeById(recipeId: Long): NewRecipeModel? {
+        val recipeEntity = recipeDao.getRecipeById(recipeId)
+        return recipeEntity?.let {
+            val jsonObject = JSONObject(it.json)
+            jsonObject.put("id", it.internalId)
+            val gson = Gson()
+            gson.fromJson(jsonObject.toString(), NewRecipeDTO::class.java).toModel()
+        }
+    }
+
+    override fun NewRecipeDTO.toModel(): NewRecipeModel {
+        return NewRecipeModel(
+            id = this.id,
+            description = this.description,
+            title = this.title,
+            thumbnailUrl = this.pictureUrl,
+            videoUrl = this.videoUrl,
+            ingredients = this.ingredients,
+            instructions = this.instructions
+
+        )
+    }
+
+    override fun List<NewRecipeDTO>.toModelList(): List<NewRecipeModel> {
+        return this.map { it.toModel() }
     }
 }
 
