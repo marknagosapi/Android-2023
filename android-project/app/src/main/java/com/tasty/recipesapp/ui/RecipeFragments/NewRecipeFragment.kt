@@ -39,29 +39,21 @@ class NewRecipeFragment : Fragment() {
     private var numberOfInstructions = 0;
     private var numberOfIngredients = 0;
 
-    private lateinit var binding : FragmentNewRecipeBinding
-//    private lateinit var recipeDao: RecipeDao
-
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        RepositoryProvider.initialize(context)
-//        recipeDao = RecipeDatabase.getDatabase(requireContext()).recipeDao()
-//    }
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_new_recipe, container, false)
-        val binding = FragmentNewRecipeBinding.inflate(inflater, container, false)
         etTitle = view.findViewById(R.id.etTitle)
         etDescription = view.findViewById(R.id.etDescription)
         etPictureUrl = view.findViewById(R.id.etPictureUrl)
         etVideoUrl = view.findViewById(R.id.etVideoUrl)
-        llIngredientsContainer = binding.llIngredientsContainer
-        llInstructionsContainer = binding.llInstructionsContainer
+        llIngredientsContainer = view.findViewById(R.id.llIngredientsContainer)
+        llInstructionsContainer = view.findViewById(R.id.llInstructionsContainer)
 
-        val btnAddIngredient: Button = binding.btnAddIngredient
+        val btnAddIngredient: Button = view.findViewById(R.id.btnAddIngredient)
+
         btnAddIngredient.setOnClickListener {
             addNewField(llIngredientsContainer, "Ingredient")
         }
@@ -74,9 +66,11 @@ class NewRecipeFragment : Fragment() {
         val btnSave: Button = view.findViewById(R.id.btnSave)
         btnSave.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                saveRecipe(view)
-                findNavController().navigateUp()
-                Toast.makeText(requireContext(), "Your Recipe Was Saved!", Toast.LENGTH_SHORT).show()
+                if(saveRecipe(view)) {
+                    findNavController().navigateUp()
+                    Toast.makeText(requireContext(), "Your Recipe Was Saved!", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
 
@@ -105,7 +99,7 @@ class NewRecipeFragment : Fragment() {
         container.addView(editText)
     }
 
-    private fun saveRecipe(view: View) {
+    private fun saveRecipe(view: View) : Boolean {
 
         etTitle = view.findViewById(R.id.etTitle)
         etDescription = view.findViewById(R.id.etDescription)
@@ -121,12 +115,20 @@ class NewRecipeFragment : Fragment() {
         val videoURL = etVideoUrl.text.toString()
 
 
+//        Validation
+
+        if(title.isEmpty() || description.isEmpty() ) {
+            Toast.makeText(requireContext(), "Please Fill In At Least Title and Description!", Toast.LENGTH_SHORT).show()
+            return false
+        }
 
         val ingredients = mutableListOf<String>()
         for (i in 0 until llIngredientsContainer.childCount) {
             val editText = llIngredientsContainer.getChildAt(i) as? EditText
             editText?.let {
-                ingredients.add(it.text.toString())
+                if(it.text.toString().isNotEmpty()) {
+                    ingredients.add(it.text.toString())
+                }
             }
         }
 
@@ -134,10 +136,11 @@ class NewRecipeFragment : Fragment() {
         for (i in 0 until llInstructionsContainer.childCount) {
             val editText = llInstructionsContainer.getChildAt(i) as? EditText
             editText?.let {
-                instructions.add(it.text.toString())
+                if(it.text.toString().isNotEmpty()) {
+                    instructions.add(it.text.toString())
+                }
             }
         }
-        Log.d("Recipe", "saveRecipe: " + title + " " + description + " " + pictureURL + " " + videoURL + " " + ingredients + " " + instructions)
 
         val recipe = createJsonFromInputs(title, description, pictureURL, videoURL, ingredients, instructions)
         val recipeEntity = RecipeEntity(
@@ -145,10 +148,12 @@ class NewRecipeFragment : Fragment() {
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
-            Log.d("Recipe", "saveRecipe: " + recipeEntity)
+
             RepositoryProvider.recipeRepository.insertRecipe(recipeEntity)
         }
+
         findNavController().navigateUp()
+        return true
     }
     private fun createJsonFromInputs(title: String, description: String, pictureUrl: String, videoUrl: String, ingredients: List<String>, instructions: List<String>): String {
         val jsonObject = JSONObject()

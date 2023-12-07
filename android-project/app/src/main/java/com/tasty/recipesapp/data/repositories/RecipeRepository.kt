@@ -78,7 +78,7 @@ class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<New
             id = this.id,
             description = this.description,
             title = this.title,
-            thumbnailUrl = this.pictureUrl,
+            thumbnailUrl = this.thumbnailUrl,
             videoUrl = this.videoUrl,
             ingredients = this.ingredients,
             instructions = this.instructions

@@ -38,6 +38,9 @@ android {
 
 dependencies {
 
+    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata:2.3.1")
+
 
     implementation ("androidx.media3:media3-exoplayer:1.0.1")
     implementation ("androidx.media3:media3-exoplayer-dash:1.0.1")

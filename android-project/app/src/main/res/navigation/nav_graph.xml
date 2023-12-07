@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.tasty.recipesapp.ui.ProfileFragment"
+        android:name="com.tasty.recipesapp.ui.ProfileFragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action

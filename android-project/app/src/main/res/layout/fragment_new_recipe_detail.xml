@@ -88,13 +88,11 @@
                 android:layout_marginTop="16dp"
                 android:text="Video"/>
 
-            <androidx.media3.ui.PlayerView
+
+            <VideoView
                 android:id="@+id/playerView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="8dp"/>
-
-
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textViewVideoUrl"
@@ -104,6 +102,14 @@
                 android:textSize="18sp"
                 android:text="Video"/>
 
+
+            <Button
+                android:id="@+id/backButtonNewRecipeDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:backgroundTint="#f68787"
+                android:layout_marginTop="16dp"/>
         </LinearLayout>
 
     </ScrollView>

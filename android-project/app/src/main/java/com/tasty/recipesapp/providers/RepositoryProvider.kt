@@ -20,6 +20,6 @@ object RepositoryProvider {
             throw UninitializedPropertyAccessException("RepositoryProvider has not been initialized")
         }
     }
-    val instructionsRepository: InstructionRepository = InstructionRepository()
+
 
 }
