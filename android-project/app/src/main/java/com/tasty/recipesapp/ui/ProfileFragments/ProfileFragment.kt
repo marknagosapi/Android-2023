@@ -1,36 +1,32 @@
 package com.tasty.recipesapp.ui.ProfileFragments
 
-import android.app.AlertDialog
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.gson.Gson
-import com.tasty.recipesapp.R
-import com.tasty.recipesapp.data.entities.RecipeEntity
-import com.tasty.recipesapp.data.model.NewRecipeModel
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+
 
 import com.tasty.recipesapp.databinding.FragmentProfileBinding
 import com.tasty.recipesapp.ui.RecipeFragments.NewRecipeAdapter
-import com.tasty.recipesapp.ui.RecipeFragments.NewRecipeDetailFragment
-import kotlinx.coroutines.launch
+
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
     private lateinit var recipeAdapter: NewRecipeAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +39,7 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false);
 
+
         return binding.root;
     }
 
@@ -53,23 +50,22 @@ class ProfileFragment : Fragment() {
             profileViewModel.navigateToNewRecipeFragment(binding.root)
         }
 
-        val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+        viewPager = binding.viewPager
+        tabLayout = binding.tabLayout
 
-        recipeAdapter = NewRecipeAdapter(emptyList(),
-            { recipe -> profileViewModel.confirmDeleteRecipe(recipe,requireContext(),this) },
-            { recipe -> profileViewModel.onRecipeClicked(recipe, this) }
-        )
+        profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
 
-        recyclerView.adapter = recipeAdapter
+        // Create and set up the adapter
+        val profilePagerAdapter = ProfilePagerAdapter(this)
+        viewPager.adapter = profilePagerAdapter
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            profileViewModel.getAllRecipes()
-        }
-
-        profileViewModel.allRecipes.observe(viewLifecycleOwner) { recipes ->
-            recipeAdapter.updateData(recipes)
-        }
+        // Set up tabs
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "My Recipes"
+                1 -> "Profile"
+                else -> ""
+            }
+        }.attach()
     }
 }

@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initBottomNavigation()
         RepositoryProvider.initialize(context = this.applicationContext)
+        RepositoryProvider.initaliazePreferencesManager(context = this.applicationContext)
     }
 
     private fun initBottomNavigation() {
