@@ -3,25 +3,30 @@ package com.tasty.recipesapp.ui.RecipeFragments
 // RecipeAdapter.kt
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tasty.recipesapp.data.model.RecipeModel
 
 import com.tasty.recipesapp.R
-class RecipeAdapter(private val recipes: List<RecipeModel>) :
+import com.tasty.recipesapp.data.model.ascendingComparator
+import com.tasty.recipesapp.data.model.descendingComparator
+import java.util.Locale
 
+class RecipeAdapter(private var recipes: List<RecipeModel>) :
 
-    RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
+    RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>(), Filterable{
+
+    private var filteredRecipes: List<RecipeModel> = recipes
 
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -43,7 +48,7 @@ class RecipeAdapter(private val recipes: List<RecipeModel>) :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
-        val recipe = recipes[position]
+        val recipe = filteredRecipes[position]
         holder.recipeTitle.text = recipe.name
         holder.recipeCalories.text = "Calories: " + recipe.nutrition.calories.toString()
         holder.recipeProtein.text = "Protein: " + recipe.nutrition.protein.toString()
@@ -66,16 +71,53 @@ class RecipeAdapter(private val recipes: List<RecipeModel>) :
             view.findNavController().navigate(action)
         }
 
-
-        // Load recipe image using Glide
         Glide.with(holder.itemView.context)
             .load(recipe.thumbnailUrl)
             .placeholder(R.drawable.cheesecake_logo) // Placeholder image if loading fails
-//            .error(R.drawable.error_image) // Image to show if there's an error
             .into(holder.recipeImage)
     }
 
     override fun getItemCount(): Int {
         return recipes.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(newList: List<RecipeModel>) {
+        recipes = newList
+        filteredRecipes = newList
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun sort(ascending: Boolean) {
+        val comparator = if (ascending) ascendingComparator else descendingComparator
+        filteredRecipes = filteredRecipes.sortedWith(comparator)
+        notifyDataSetChanged()
+    }
+
+    // Implement Filterable interface methods
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
+                val query = charSequence.toString().lowercase(Locale.getDefault())
+                val filteredList = mutableListOf<RecipeModel>()
+
+                for (recipe in recipes) {
+                    if (recipe.name.lowercase(Locale.getDefault()).contains(query)) {
+                        filteredList.add(recipe)
+                    }
+                }
+
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
+                filteredRecipes = filterResults.values as List<RecipeModel>
+                notifyDataSetChanged()
+            }
+        }
     }
 }

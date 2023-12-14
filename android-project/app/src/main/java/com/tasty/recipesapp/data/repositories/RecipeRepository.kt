@@ -3,6 +3,7 @@ package com.tasty.recipesapp.data.repositories
 import com.google.gson.Gson
 import com.tasty.recipesapp.data.dto.RecipeDTO
 import android.content.Context
+import android.util.Log
 import com.tasty.recipesapp.data.dao.RecipeDao
 import com.tasty.recipesapp.data.dto.NewRecipeDTO
 import com.tasty.recipesapp.data.entities.RecipeEntity
@@ -10,6 +11,9 @@ import com.tasty.recipesapp.data.model.NewRecipeModel
 import com.tasty.recipesapp.data.model.RecipeModel
 import com.tasty.recipesapp.data.utils.Mapping.toModel
 import com.tasty.recipesapp.data.utils.Mapping.toModelList
+import com.tasty.recipesapp.providers.RepositoryProvider
+import com.tasty.recipesapp.services.RecipeApiClient
+import com.tasty.recipesapp.services.RecipeService
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -63,6 +67,7 @@ class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<New
         }
     }
 
+
     suspend fun getRecipeById(recipeId: Long): NewRecipeModel? {
         val recipeEntity = recipeDao.getRecipeById(recipeId)
         return recipeEntity?.let {
@@ -71,6 +76,17 @@ class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<New
             val gson = Gson()
             gson.fromJson(jsonObject.toString(), NewRecipeDTO::class.java).toModel()
         }
+    }
+
+    private val recipeApiClient = RecipeApiClient()
+    suspend fun getRecipesFromApi( from: String,
+                                   size: String,
+                                   tags: String? = null,
+    ): List<RecipeModel>?{
+
+        val response = recipeApiClient.getRecipes(from, size, tags)?.toModelList()
+        response?.forEach { re -> Log.d("OOO", "getRecipesFromApi: " + re.name)}
+    return response
     }
 
     override fun NewRecipeDTO.toModel(): NewRecipeModel {
@@ -89,5 +105,6 @@ class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<New
     override fun List<NewRecipeDTO>.toModelList(): List<NewRecipeModel> {
         return this.map { it.toModel() }
     }
+
 }
 

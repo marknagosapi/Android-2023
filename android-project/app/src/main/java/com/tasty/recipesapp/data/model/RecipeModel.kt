@@ -37,3 +37,9 @@ data class RecipeModel (
 //    val show_id: Int,
 //    val keywords: String
 )
+// Sorting in ascending order based on title
+val ascendingComparator: Comparator<RecipeModel> = compareBy { it.name }
+// Sorting in descending order based on title
+val descendingComparator: Comparator<RecipeModel> = compareByDescending { it.name}
+
+

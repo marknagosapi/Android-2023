@@ -41,6 +41,12 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel:2.3.1")
     implementation ("androidx.lifecycle:lifecycle-livedata:2.3.1")
 
+//    Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
+
 
     implementation ("androidx.media3:media3-exoplayer:1.0.1")
     implementation ("androidx.media3:media3-exoplayer-dash:1.0.1")

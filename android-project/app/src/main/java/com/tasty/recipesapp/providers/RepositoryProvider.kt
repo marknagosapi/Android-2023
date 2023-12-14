@@ -20,6 +20,9 @@ object RepositoryProvider {
         checkInitialized()
         RecipeRepository(recipeDao)
     }
+
+
+
     private fun checkInitialized() {
         if (!::recipeDao.isInitialized) {
             throw UninitializedPropertyAccessException("RepositoryProvider has not been initialized")
