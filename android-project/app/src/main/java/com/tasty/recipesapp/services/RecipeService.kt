@@ -15,7 +15,7 @@ interface RecipeService {
     )
 suspend fun getRecipes(
     @Query("from") from: String, @Query("size") size: String, @Query("tags") tags: String? = null
-): List<RecipeDTO>
+): RecipeResponseDTO
 
 }
 

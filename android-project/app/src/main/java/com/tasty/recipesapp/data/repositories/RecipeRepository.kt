@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.tasty.recipesapp.data.dto.RecipeDTO
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.tasty.recipesapp.data.dao.RecipeDao
 import com.tasty.recipesapp.data.dto.NewRecipeDTO
 import com.tasty.recipesapp.data.entities.RecipeEntity
@@ -14,6 +15,7 @@ import com.tasty.recipesapp.data.utils.Mapping.toModelList
 import com.tasty.recipesapp.providers.RepositoryProvider
 import com.tasty.recipesapp.services.RecipeApiClient
 import com.tasty.recipesapp.services.RecipeService
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -23,6 +25,10 @@ data class RecipeResponseDTO(
 )
 class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<NewRecipeDTO, NewRecipeModel> {
     val instructionsRepository: InstructionRepository = InstructionRepository()
+    private lateinit var recipeApiClient: RecipeApiClient
+    init {
+        recipeApiClient = RecipeApiClient()
+    }
 
     fun loadRecipesFromAssets(context: Context): List<RecipeModel>? {
         val jsonFileName = "data.json"
@@ -78,15 +84,12 @@ class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<New
         }
     }
 
-    private val recipeApiClient = RecipeApiClient()
-    suspend fun getRecipesFromApi( from: String,
-                                   size: String,
-                                   tags: String? = null,
-    ): List<RecipeModel>?{
 
-        val response = recipeApiClient.getRecipes(from, size, tags)?.toModelList()
-        response?.forEach { re -> Log.d("OOO", "getRecipesFromApi: " + re.name)}
-    return response
+    suspend fun getRecipesFromApi(from: String,
+                                  size: String,
+                                  tags: String? = null,
+    ): List<RecipeModel>?{
+        return recipeApiClient.getRecipes(from, size, tags)?.results?.toModelList()
     }
 
     override fun NewRecipeDTO.toModel(): NewRecipeModel {

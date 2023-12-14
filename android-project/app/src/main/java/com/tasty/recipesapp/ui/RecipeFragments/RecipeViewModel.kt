@@ -16,15 +16,15 @@ import kotlinx.coroutines.launch
 
 class RecipeViewModel : ViewModel() {
 
+    val recipeData = MutableLiveData<List<RecipeModel>>()
     fun loadRecipesFromAssets(context: Context): List<RecipeModel>? {
         return RepositoryProvider.recipeRepository.loadRecipesFromAssets(context)
     }
 
     fun getAllRecipesFromApi(): List<RecipeModel>? {
-        var recipes: List<RecipeModel> = listOf()
         viewModelScope.launch {
-            recipes = RepositoryProvider.recipeRepository.getRecipesFromApi("0", "15")!!
+          recipeData.value = RepositoryProvider.recipeRepository.getRecipesFromApi("0", "15","30 minutes")!!
         }
-        return recipes
+        return recipeData.value
     }
 }

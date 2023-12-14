@@ -44,6 +44,7 @@ class RecipeFragment : Fragment() {
 
         val viewModel = ViewModelProvider(this)[RecipeViewModel::class.java]
         val recipes = viewModel.getAllRecipesFromApi()
+        Log.d("RR", "onViewCreated: "+ recipes)
 
         val recyclerView: RecyclerView = binding.recyclerView;
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

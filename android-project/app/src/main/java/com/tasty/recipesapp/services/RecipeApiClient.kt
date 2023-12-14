@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RecipeApiClient {
     companion object {
         private const val BASE_URL = "https://tasty.p.rapidapi.com/"
-        private var recipeService: RecipeService
+        private val recipeService: RecipeService
 
         init {
             val retrofit = Retrofit.Builder()
@@ -24,11 +24,11 @@ class RecipeApiClient {
         }
     }
 
-    suspend fun getRecipes(from: String, size: String, tags: String? = null): List<RecipeDTO>? {
+    suspend fun getRecipes(from: String, size: String, tags: String? = null): RecipeResponseDTO? {
         return withContext(Dispatchers.IO) { try {
             recipeService.getRecipes(from, size, tags) } catch (e: Exception) {
             null
-        }
+            }
         }
     }
 }
