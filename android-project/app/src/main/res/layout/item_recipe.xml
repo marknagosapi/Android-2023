@@ -10,11 +10,14 @@
     android:elevation="8dp"
     android:radius="16dp">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+
+
 
 
         <ImageView
@@ -34,6 +37,32 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/userRatingTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rating: "
+                android:textStyle="bold"
+                android:paddingTop="8dp" />
+
+            <TextView
+                android:id="@+id/userRatingHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:paddingLeft="8dp" />
+
+        </LinearLayout>
+
+
+
+
 
         <TextView
             android:id="@+id/nutrientsTitle"

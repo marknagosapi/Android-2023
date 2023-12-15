@@ -48,7 +48,19 @@
             android:layout_below="@id/recipeDescription"
             android:layout_marginTop="8dp"
             android:text="Instructions: "
+            android:textStyle="bold"
             android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/recipeInstructionsHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recipeInstructionsText"
+            android:layout_marginTop="10dp"
+            android:layout_above="@id/backButton"
+            android:textSize="15sp"/>
+
+
 
         <!-- Add other UI elements as needed -->
 </RelativeLayout>

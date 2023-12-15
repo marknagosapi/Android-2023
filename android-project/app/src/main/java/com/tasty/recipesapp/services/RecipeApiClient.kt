@@ -14,13 +14,16 @@ class RecipeApiClient {
     companion object {
         private const val BASE_URL = "https://tasty.p.rapidapi.com/"
         private val recipeService: RecipeService
+        private val recipeDetailService: RecipeDetailService
 
         init {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
+            recipeDetailService = retrofit.create(RecipeDetailService::class.java)
             recipeService = retrofit.create(RecipeService::class.java)
+
         }
     }
 
@@ -31,5 +34,13 @@ class RecipeApiClient {
             }
         }
     }
+
+    suspend fun getRecipeDetail(id: String): RecipeDTO? {
+        return withContext(Dispatchers.IO) { try {
+            recipeDetailService.getRecipeDetail(id) } catch (e: Exception) {
+            null
+            }
+        }}
+
 }
 

@@ -92,6 +92,11 @@ class RecipeRepository(private val recipeDao: RecipeDao): IGenericRepository<New
         return recipeApiClient.getRecipes(from, size, tags)?.results?.toModelList()
     }
 
+    suspend fun getRecipeDetailFromApi(id: String): RecipeModel? {
+        Log.d("Recipe", "Recipe + $id: + ${recipeApiClient.getRecipeDetail(id)?.toModel()} ")
+        return recipeApiClient.getRecipeDetail(id)?.toModel()
+    }
+
     override fun NewRecipeDTO.toModel(): NewRecipeModel {
         return NewRecipeModel(
             id = this.id,

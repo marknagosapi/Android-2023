@@ -3,6 +3,7 @@ package com.tasty.recipesapp.ui.RecipeFragments
 // RecipeAdapter.kt
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,7 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
         val recipeCarbs: TextView = itemView.findViewById(R.id.carbohydrates)
         val recipeFats: TextView = itemView.findViewById(R.id.fats)
         val recipeImage: ImageView = itemView.findViewById(R.id.recipeImage)
+        val userRating: TextView = itemView.findViewById(R.id.userRatingHolder)
 
     }
 
@@ -55,6 +57,7 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
         holder.recipeProtein.text = "Protein: " + recipe.nutrition.protein.toString()
         holder.recipeCarbs.text = "Carbohydrates: " + recipe.nutrition.carbohydrates.toString()
         holder.recipeFats.text = "Fats: " + recipe.nutrition.fat.toString()
+        holder.userRating.text = String.format("%.2f", recipe.userRatings.score*100) +" :)"
 
         holder.itemView.setOnClickListener { view ->
             val action: NavDirections = object : NavDirections {
@@ -63,6 +66,7 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
                     get() = R.id.action_recipeFragment_to_recipeDetailFragment2
                 override val arguments: Bundle
                     get() = bundleOf(
+                        "arg_recipe_id" to recipe.id,
                         "arg_recipe_title" to recipe.name,
                         "arg_recipe_description" to recipe.description,
                         "arg_recipe_image" to recipe.thumbnailUrl,
@@ -113,6 +117,7 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
 
     @SuppressLint("NotifyDataSetChanged")
     fun sort(ascending: Boolean) {
+        Log.d("SORT", "sort: "+  ascending)
         val comparator = if (ascending) ascendingComparator else descendingComparator
         filteredRecipes = filteredRecipes.sortedWith(comparator)
         notifyDataSetChanged()

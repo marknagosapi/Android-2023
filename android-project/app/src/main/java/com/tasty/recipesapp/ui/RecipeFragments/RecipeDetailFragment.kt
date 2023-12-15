@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.tasty.recipesapp.R
@@ -26,6 +27,7 @@ class RecipeDetailFragment : Fragment() {
     }
     private lateinit var binding: FragmentRecipeDetailBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("SCREENS","Opened Recipe Detail Screen!")
@@ -43,23 +45,29 @@ class RecipeDetailFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val viewModel = ViewModelProvider(this)[RecipeDetailViewModel::class.java]
+
+
         // Retrieve arguments
-        val title = arguments?.getString(recipeTitle) ?: ""
-        val description = arguments?.getString(recipeDescription    ) ?: ""
-        val imageResId = arguments?.getString(ARG_RECIPE_IMAGE) ?: ""
         val instructions = arguments?.getString(ARG_RECIPE_INSTRUCTIONS) ?: ""
-        Log.d("alma", "onViewCreated: " + instructions)
+        val id = arguments?.getInt("arg_recipe_id") ?: 0
+
+        val recipe = viewModel.loadRecipeFromApi(id.toString())
+
 
         // Update UI with recipe details
         Glide.with(requireContext())
-            .load(imageResId)
+            .load(recipe?.thumbnailUrl)
             .placeholder(R.drawable.cheesecake_logo)
 
             .into(binding.recipeDetailImage)
 
-        binding.recipeInstructionsText.text = instructions
-        binding.recipeTitle.text = title
-        binding.recipeDescription.text = description
+        val ins: String = "";
+        recipe?.instructions?.forEach { it -> ins.plus("-" + it.displayText +"\n")}
+        binding.recipeInstructionsHolder.text = ins
+        binding.recipeTitle.text = recipe?.name
+        binding.recipeDescription.text = recipe?.description
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()

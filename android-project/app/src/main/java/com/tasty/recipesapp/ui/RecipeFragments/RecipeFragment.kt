@@ -49,7 +49,7 @@ class RecipeFragment : Fragment() {
 
         val viewModel = ViewModelProvider(this)[RecipeViewModel::class.java]
         val recipes = viewModel.getAllRecipesFromApi()
-        Log.d("RR", "onViewCreated: "+ recipes)
+
 
         val recyclerView: RecyclerView = binding.recyclerView;
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -58,7 +58,11 @@ class RecipeFragment : Fragment() {
         recyclerView.adapter = adapter
 
         val fabMenu: FloatingActionButton = binding.fabMenu
-        fabMenu.setOnClickListener { showPopupMenu(fabMenu) }
+        fabMenu.setOnClickListener {
+            if (adapter != null) {
+                showPopupMenu(fabMenu, adapter)
+            }
+        }
 
         val editTextSearch: EditText = binding.editTextSearch
         val btnSearch: Button = binding.btnSearch
@@ -69,22 +73,19 @@ class RecipeFragment : Fragment() {
         }
 
     }
-    private fun showPopupMenu(view: View) {
+    private fun showPopupMenu(view: View, adapter: RecipeAdapter) {
         val popupMenu = PopupMenu(requireContext(), view)
+
         popupMenu.menuInflater.inflate(R.menu.menu_recipe_sort, popupMenu.menu)
 
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_search -> {
-                    // Handle search action
+                R.id.action_sort_asc -> {
+                    adapter?.sort(true)
                     true
                 }
-                R.id.action_sort -> {
-                    // Handle filter action
-                    true
-                }
-                R.id.menu_filter -> {
-                    // Handle sort action
+                R.id.action_sort_desc -> {
+                    adapter.sort(false)
                     true
                 }
                 else -> false

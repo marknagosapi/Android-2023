@@ -47,9 +47,6 @@ class NewRecipeDetailFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-
-
-
         lifecycleScope.launch {
             val args = this@NewRecipeDetailFragment.arguments
             val inputId = args?.get("recipe") as? Long
