@@ -24,9 +24,10 @@ import java.util.Locale
 
 class RecipeAdapter(private var recipes: List<RecipeModel>) :
 
-    RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>(), Filterable{
+    RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>(){
 
     private var filteredRecipes: List<RecipeModel> = recipes
+    private var originalList: List<RecipeModel> = recipes
 
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -78,15 +79,37 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
     }
 
     override fun getItemCount(): Int {
-        return recipes.size
+        return filteredRecipes.size
+    }
+
+//    Search
+
+    // Function to perform search
+    fun search(query: CharSequence?) {
+        if(query.isNullOrBlank()) {
+            setOriginalList(originalList)
+        }
+        updateFilteredList(query.toString())
+    }
+    fun setOriginalList(list: List<RecipeModel>) {
+        filteredRecipes = list
+        updateFilteredList("")
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(newList: List<RecipeModel>) {
-        recipes = newList
-        filteredRecipes = newList
+    private fun updateFilteredList(query: String) {
+        filteredRecipes = if (query.isBlank()) {
+            originalList
+        } else {
+            originalList.filter { recipe ->
+                // Check if the recipe name contains the query as a whole word or subword
+                recipe.name.contains(query, ignoreCase = true) ||
+                        recipe.name.split("\\s+".toRegex()).any { it.contains(query, ignoreCase = true) }
+            }
+        }
         notifyDataSetChanged()
     }
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun sort(ascending: Boolean) {
@@ -96,28 +119,5 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
     }
 
     // Implement Filterable interface methods
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): FilterResults {
-                val query = charSequence.toString().lowercase(Locale.getDefault())
-                val filteredList = mutableListOf<RecipeModel>()
 
-                for (recipe in recipes) {
-                    if (recipe.name.lowercase(Locale.getDefault()).contains(query)) {
-                        filteredList.add(recipe)
-                    }
-                }
-
-                val filterResults = FilterResults()
-                filterResults.values = filteredList
-                return filterResults
-            }
-
-            @SuppressLint("NotifyDataSetChanged")
-            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-                filteredRecipes = filterResults.values as List<RecipeModel>
-                notifyDataSetChanged()
-            }
-        }
-    }
 }

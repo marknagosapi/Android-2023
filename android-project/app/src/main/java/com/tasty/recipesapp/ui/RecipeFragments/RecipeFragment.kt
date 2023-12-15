@@ -9,6 +9,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.PopupMenu
 import android.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -17,6 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.tasty.recipesapp.R
 import com.tasty.recipesapp.databinding.FragmentRecipeBinding
 
 
@@ -52,26 +57,40 @@ class RecipeFragment : Fragment() {
         val adapter = recipes?.let { RecipeAdapter(it) }
         recyclerView.adapter = adapter
 
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
+        val fabMenu: FloatingActionButton = binding.fabMenu
+        fabMenu.setOnClickListener { showPopupMenu(fabMenu) }
 
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                val searchItem = menu.findItem(com.tasty.recipesapp.R.id.action_search)
-                val searchView = searchItem.actionView as SearchView
-                menuInflater.inflate(com.tasty.recipesapp.R.menu.menu_recipe_sort, menu)
-            }
+        val editTextSearch: EditText = binding.editTextSearch
+        val btnSearch: Button = binding.btnSearch
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Handle the menu selection
-                return when (menuItem.itemId) {
-                    com.tasty.recipesapp.R.id.action_search -> {
-                        Log.d("alma", "onMenuItemSelected: Search")
-                        true
-                    }
-                    else -> false
+        btnSearch.setOnClickListener {
+            val query = editTextSearch.text.toString()
+            adapter?.search(query)
+        }
+
+    }
+    private fun showPopupMenu(view: View) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.menuInflater.inflate(R.menu.menu_recipe_sort, popupMenu.menu)
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_search -> {
+                    // Handle search action
+                    true
                 }
+                R.id.action_sort -> {
+                    // Handle filter action
+                    true
+                }
+                R.id.menu_filter -> {
+                    // Handle sort action
+                    true
+                }
+                else -> false
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }
 
+        popupMenu.show()
     }
 }
