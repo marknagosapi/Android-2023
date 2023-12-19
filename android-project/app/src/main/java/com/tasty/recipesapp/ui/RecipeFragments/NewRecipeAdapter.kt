@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tasty.recipesapp.R
 import com.tasty.recipesapp.data.model.NewRecipeModel
 import java.net.HttpURLConnection
@@ -19,17 +20,28 @@ class NewRecipeAdapter(
     var recipes: List<NewRecipeModel>,
     private val onRecipeLongClicked: (NewRecipeModel) -> Unit,
     private val onClickListener: (NewRecipeModel) -> Unit
+
 ) : RecyclerView.Adapter<NewRecipeAdapter.NewRecipeViewHolder>() {
 
+    private lateinit var cakeIcon: FloatingActionButton
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewRecipeViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.own_item_recipe, parent, false)
+        cakeIcon = view.findViewById(R.id.cakeIcon)
         return NewRecipeViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: NewRecipeViewHolder, position: Int) {
         val recipe = recipes[position]
         holder.textView.text = recipe.title
+
+        if(recipe.videoUrl != "FAV"){
+            cakeIcon.hide()
+        }
+
+        if(recipe.videoUrl == "FAV"){
+            cakeIcon.show()
+        }
 
         val executor = Executors.newSingleThreadExecutor()
 

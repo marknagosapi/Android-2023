@@ -4,31 +4,34 @@ package com.tasty.recipesapp.ui.RecipeFragments
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.PopupMenu
-import android.widget.SearchView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tasty.recipesapp.R
+import com.tasty.recipesapp.data.entities.RecipeEntity
+import com.tasty.recipesapp.data.model.RecipeModel
 import com.tasty.recipesapp.databinding.FragmentRecipeBinding
+import com.tasty.recipesapp.providers.RepositoryProvider
+import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
 
-class RecipeFragment : Fragment() {
+class RecipeFragment : Fragment(), OnAddToFavoritesClickListener{
 
     private lateinit var binding: FragmentRecipeBinding
     private lateinit var adapter: RecipeAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +57,8 @@ class RecipeFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView;
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val adapter = recipes?.let { RecipeAdapter(it) }
+        val adapter = recipes?.let { RecipeAdapter(it,this) }
+
         recyclerView.adapter = adapter
 
         val fabMenu: FloatingActionButton = binding.fabMenu
@@ -94,4 +98,62 @@ class RecipeFragment : Fragment() {
 
         popupMenu.show()
     }
+
+    private suspend fun saveRecipe(recipe: RecipeModel) : Boolean {
+
+        val title = recipe.name
+        val description = recipe.description
+        var pictureURL = recipe.thumbnailUrl
+        var videoURL = recipe.videoUrl
+
+
+        val ingredients = mutableListOf<String>()
+        for (i in 0 until recipe.sections.size) {
+            for(j in 0 until recipe.sections[i].components.size){
+                ingredients.add(recipe.sections[i].components[j].ingredient.name)
+            }
+        }
+
+        val instructions = mutableListOf<String>()
+        for (i in 0 until recipe.instructions.size) {
+            instructions.add(recipe.instructions[i].displayText)
+        }
+
+        if(pictureURL == null ) {
+            pictureURL = "";
+        }
+
+        val favRecipe =
+                createJsonFromInputs(
+                    title, description,
+                    pictureURL, "FAV",ingredients, instructions
+                )
+
+        val recipeEntity = RecipeEntity(
+            json = favRecipe
+        )
+
+        RepositoryProvider.recipeRepository.insertRecipe(recipeEntity)
+        return true
+    }
+
+
+    private fun createJsonFromInputs(title: String, description: String, pictureUrl: String, videoUrl: String, ingredients: List<String>, instructions: List<String>): String {
+        val jsonObject = JSONObject()
+        jsonObject.put("title", title)
+        jsonObject.put("description", description)
+        jsonObject.put("thumbnailUrl", pictureUrl)
+        jsonObject.put("videoUrl", videoUrl)
+        jsonObject.put("ingredients", JSONArray(ingredients))
+        jsonObject.put("instructions", JSONArray(instructions))
+
+        return jsonObject.toString()
+    }
+
+    override fun onAddToFavoritesClick(recipe: RecipeModel) {
+        lifecycleScope.launch {
+           saveRecipe(recipe)
+        }
+    }
+
 }

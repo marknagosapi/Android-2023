@@ -48,26 +48,39 @@ class RecipeDetailFragment : Fragment() {
 
         val viewModel = ViewModelProvider(this)[RecipeDetailViewModel::class.java]
 
-
-        // Retrieve arguments
-        val instructions = arguments?.getString(ARG_RECIPE_INSTRUCTIONS) ?: ""
         val id = arguments?.getInt("arg_recipe_id") ?: 0
 
-        val recipe = viewModel.loadRecipeFromApi(id.toString())
+        val loadingAnimationResourceId = R.drawable.loading_animation
+
+        viewModel.loadRecipeFromApi(id.toString())
+        viewModel.recipeData.observe(viewLifecycleOwner){recipe->
+            // Update UI with recipe details
+            Glide.with(requireContext())
+                .load(recipe?.thumbnailUrl)
+                .placeholder(loadingAnimationResourceId)
+                .into(binding.recipeDetailImage)
 
 
-        // Update UI with recipe details
-        Glide.with(requireContext())
-            .load(recipe?.thumbnailUrl)
-            .placeholder(R.drawable.cheesecake_logo)
+            var instructions: MutableList<String> = mutableListOf()
+            var result: String = ""
+            recipe?.instructions?.forEach() { ins ->
+               instructions.add("-" + ins.displayText)
+            }
 
-            .into(binding.recipeDetailImage)
+            var ingredients: MutableList<String> = mutableListOf()
+            recipe?.sections?.forEach() { sec ->
+                sec.components.forEach() { comp ->
+                    ingredients.add("-" + comp.ingredient.name)
+                }
+            }
+            val ingredientResult = ingredients.joinToString(separator = "\n")
+            result = instructions.joinToString(separator = "\n")
+            binding.recipeIngredientsHolder.text = ingredientResult
+            binding.recipeInstructionsHolder.text = result
+            binding.recipeTitle.text = recipe?.name
+            binding.recipeDescription.text = recipe?.description
 
-        val ins: String = "";
-        recipe?.instructions?.forEach { it -> ins.plus("-" + it.displayText +"\n")}
-        binding.recipeInstructionsHolder.text = ins
-        binding.recipeTitle.text = recipe?.name
-        binding.recipeDescription.text = recipe?.description
+        }
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()

@@ -1,6 +1,8 @@
 package com.tasty.recipesapp.ui.RecipeFragments
 
+import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 
 import android.os.AsyncTask
 import android.os.Bundle
@@ -10,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.VideoView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -60,6 +63,7 @@ class NewRecipeDetailFragment : Fragment() {
                 val textViewIngredients = binding.textViewIngredients
                 val textViewInstructions = binding.textViewInstructions
                 val textViewVideoUrl = binding.textViewVideoUrl
+                val openLinkButton: Button = binding.openLinkButton
 
                 Glide.with(this@NewRecipeDetailFragment)
                     .load(recipe?.thumbnailUrl)
@@ -69,8 +73,26 @@ class NewRecipeDetailFragment : Fragment() {
                 textViewDescription.text = recipe?.description
                 textViewIngredients.text = recipe?.ingredients?.joinToString(separator = "\n") { "- $it" }
                 textViewInstructions.text = recipe?.instructions?.joinToString(separator = "\n") { "- $it" }
-                textViewVideoUrl.text = recipe?.videoUrl
 
+                if(recipe?.videoUrl == "FAV"){
+                    textViewVideoUrl.text = "No Video Available!"
+                    openLinkButton.visibility = View.GONE
+                } else {
+                    openLinkButton.visibility = View.VISIBLE
+                    textViewVideoUrl.text = "Click To View Video!"
+
+                    openLinkButton.setOnClickListener {
+                        // Define the URL you want to open
+                        val url = recipe?.videoUrl
+
+                        // Create an Intent with the ACTION_VIEW action and the URL as data
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+                        startActivity(intent)
+
+                    }
+
+                }
 
                 // Observe changes in video readiness
                 videoViewModel.isVideoReady.observe(viewLifecycleOwner, Observer { isReady ->

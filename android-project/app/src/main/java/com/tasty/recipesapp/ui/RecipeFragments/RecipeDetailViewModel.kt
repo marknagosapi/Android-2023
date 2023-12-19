@@ -11,13 +11,12 @@ import kotlinx.coroutines.launch
 
 class RecipeDetailViewModel : ViewModel() {
 
-    private val recipeData = MutableLiveData<RecipeModel>()
+     val recipeData = MutableLiveData<RecipeModel>()
 
-    fun loadRecipeFromApi(id: String): RecipeModel? {
-    viewModelScope.launch {
-        recipeData.value = RepositoryProvider.recipeRepository.getRecipeDetailFromApi(id)
-    }
-        Log.d("RecipeDetailViewModel", "recipeData.value: ${recipeData.value}")
-        return recipeData.value
+    fun loadRecipeFromApi(id: String) {
+        viewModelScope.launch {
+            recipeData.value = RepositoryProvider.recipeRepository.getRecipeDetailFromApi(id)
+            Log.d("RecipeDetailViewModel", "recipeData.value: ${recipeData.value}")
+        }
     }
 }

@@ -7,27 +7,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+
 import com.bumptech.glide.Glide
 import com.tasty.recipesapp.data.model.RecipeModel
 
 import com.tasty.recipesapp.R
+
 import com.tasty.recipesapp.data.model.ascendingComparator
 import com.tasty.recipesapp.data.model.descendingComparator
-import java.util.Locale
 
-class RecipeAdapter(private var recipes: List<RecipeModel>) :
+
+interface OnAddToFavoritesClickListener {
+    fun onAddToFavoritesClick(recipe: RecipeModel)
+}
+
+class RecipeAdapter(private var recipes: List<RecipeModel>, private val onAddToFavoritesClickListener: OnAddToFavoritesClickListener) :
 
     RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>(){
 
     private var filteredRecipes: List<RecipeModel> = recipes
+    private lateinit var onAddToFavoritesClick: (RecipeModel) -> Unit
     private var originalList: List<RecipeModel> = recipes
 
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,6 +46,7 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
         val recipeFats: TextView = itemView.findViewById(R.id.fats)
         val recipeImage: ImageView = itemView.findViewById(R.id.recipeImage)
         val userRating: TextView = itemView.findViewById(R.id.userRatingHolder)
+        val addToFavorites: Button = itemView.findViewById(R.id.addToFavoritesButton)
 
     }
 
@@ -58,6 +66,12 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
         holder.recipeCarbs.text = "Carbohydrates: " + recipe.nutrition.carbohydrates.toString()
         holder.recipeFats.text = "Fats: " + recipe.nutrition.fat.toString()
         holder.userRating.text = String.format("%.2f", recipe.userRatings.score*100) +" :)"
+
+        holder.addToFavorites.setOnClickListener{
+            onAddToFavoritesClickListener.onAddToFavoritesClick(recipe)
+        }
+
+
 
         holder.itemView.setOnClickListener { view ->
             val action: NavDirections = object : NavDirections {
@@ -123,6 +137,5 @@ class RecipeAdapter(private var recipes: List<RecipeModel>) :
         notifyDataSetChanged()
     }
 
-    // Implement Filterable interface methods
 
 }

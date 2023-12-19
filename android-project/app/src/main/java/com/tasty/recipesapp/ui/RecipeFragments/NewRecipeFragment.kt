@@ -1,9 +1,7 @@
 package com.tasty.recipesapp.ui.RecipeFragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +12,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
 import com.tasty.recipesapp.R
-import com.tasty.recipesapp.data.dao.RecipeDao
-import com.tasty.recipesapp.data.database.RecipeDatabase
 import com.tasty.recipesapp.data.entities.RecipeEntity
-import com.tasty.recipesapp.data.model.NewRecipeModel
-import com.tasty.recipesapp.databinding.FragmentNewRecipeBinding
 import com.tasty.recipesapp.providers.RepositoryProvider
 import kotlinx.coroutines.launch
 import org.json.JSONArray

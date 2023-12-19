@@ -20,6 +20,7 @@
 
 
 
+
         <ImageView
             android:id="@+id/recipeImage"
             android:layout_width="match_parent"
@@ -101,6 +102,7 @@
             android:textStyle="italic" />
 
         <!-- Separator -->
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -109,6 +111,14 @@
             android:layout_marginBottom="8dp"/>
 
         <!-- Add more TextViews or ImageViews for other recipe details -->
+
+        <Button
+            android:id="@+id/addToFavoritesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add To Favorites"
+            android:backgroundTint="#f68787"
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
