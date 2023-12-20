@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.tasty.recipesapp.R
@@ -61,9 +62,12 @@ class UserProfileFragment : Fragment() {
             // Update ViewModel and local storage
             userProfileViewModel.updateUserProfile(newName, newEmail)
 
+            Toast.makeText(requireContext(), "Profile saved successfully!", Toast.LENGTH_SHORT).show()
             // TODO: Perfo  rm any additional actions, such as updating the UI or showing a success message
         } else {
+            Toast.makeText(requireContext(), "Please enter your name and email.", Toast.LENGTH_SHORT).show()
             // TODO: Handle validation errors, e.g., show an error message
         }
+
     }
 }

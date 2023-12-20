@@ -30,6 +30,7 @@ class RecipeApiClient {
     suspend fun getRecipes(from: String, size: String, tags: String? = null): RecipeResponseDTO? {
         return withContext(Dispatchers.IO) { try {
             recipeService.getRecipes(from, size, tags) } catch (e: Exception) {
+            Log.d("API", "getRecipes: $e")
             null
             }
         }

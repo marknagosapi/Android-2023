@@ -51,30 +51,31 @@ class RecipeFragment : Fragment(), OnAddToFavoritesClickListener{
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProvider(this)[RecipeViewModel::class.java]
-        val recipes = viewModel.getAllRecipesFromApi()
-
 
         val recyclerView: RecyclerView = binding.recyclerView;
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val adapter = recipes?.let { RecipeAdapter(it,this) }
+        viewModel.getAllRecipesFromApi()
+        viewModel.recipeData.observe(viewLifecycleOwner) { recipes ->
+            val adapter = RecipeAdapter(recipes,this, requireContext())
 
-        recyclerView.adapter = adapter
+            recyclerView.adapter = adapter
 
-        val fabMenu: FloatingActionButton = binding.fabMenu
-        fabMenu.setOnClickListener {
-            if (adapter != null) {
+            val fabMenu: FloatingActionButton = binding.fabMenu
+            fabMenu.setOnClickListener {
                 showPopupMenu(fabMenu, adapter)
+            }
+            val editTextSearch: EditText = binding.editTextSearch
+            val btnSearch: Button = binding.btnSearch
+
+            btnSearch.setOnClickListener {
+                val query = editTextSearch.text.toString()
+                adapter.search(query)
             }
         }
 
-        val editTextSearch: EditText = binding.editTextSearch
-        val btnSearch: Button = binding.btnSearch
 
-        btnSearch.setOnClickListener {
-            val query = editTextSearch.text.toString()
-            adapter?.search(query)
-        }
+
 
     }
     private fun showPopupMenu(view: View, adapter: RecipeAdapter) {

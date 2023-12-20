@@ -65,7 +65,7 @@
         android:layout_marginBottom="20dp"
         android:backgroundTint="#f68787"
         android:contentDescription="+"
-        android:src="@drawable/baseline_cake_24"
+        android:src="@drawable/baseline_sort_24"
         android:tint="@color/bottom_nav_item_icon" />
 
 

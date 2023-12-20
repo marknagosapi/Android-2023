@@ -64,13 +64,13 @@ class RecipeDetailFragment : Fragment() {
             var instructions: MutableList<String> = mutableListOf()
             var result: String = ""
             recipe?.instructions?.forEach() { ins ->
-               instructions.add("-" + ins.displayText)
+               instructions.add("- " + ins.displayText)
             }
 
             var ingredients: MutableList<String> = mutableListOf()
             recipe?.sections?.forEach() { sec ->
                 sec.components.forEach() { comp ->
-                    ingredients.add("-" + comp.ingredient.name)
+                    ingredients.add("- " + comp.ingredient.name)
                 }
             }
             val ingredientResult = ingredients.joinToString(separator = "\n")

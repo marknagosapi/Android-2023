@@ -2,6 +2,7 @@ package com.tasty.recipesapp.ui.RecipeFragments
 
 // RecipeAdapter.kt
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -23,19 +25,21 @@ import com.tasty.recipesapp.R
 
 import com.tasty.recipesapp.data.model.ascendingComparator
 import com.tasty.recipesapp.data.model.descendingComparator
+import kotlin.coroutines.coroutineContext
 
 
 interface OnAddToFavoritesClickListener {
     fun onAddToFavoritesClick(recipe: RecipeModel)
 }
 
-class RecipeAdapter(private var recipes: List<RecipeModel>, private val onAddToFavoritesClickListener: OnAddToFavoritesClickListener) :
+class RecipeAdapter(private var recipes: List<RecipeModel>, private val onAddToFavoritesClickListener: OnAddToFavoritesClickListener, private val context: Context) :
 
     RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>(){
 
     private var filteredRecipes: List<RecipeModel> = recipes
     private lateinit var onAddToFavoritesClick: (RecipeModel) -> Unit
     private var originalList: List<RecipeModel> = recipes
+
 
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -69,6 +73,7 @@ class RecipeAdapter(private var recipes: List<RecipeModel>, private val onAddToF
 
         holder.addToFavorites.setOnClickListener{
             onAddToFavoritesClickListener.onAddToFavoritesClick(recipe)
+            Toast.makeText(context,"Recipe Added to Favorites",Toast.LENGTH_SHORT).show()
         }
 
 
